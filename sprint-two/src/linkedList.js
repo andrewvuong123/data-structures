@@ -12,7 +12,7 @@ var LinkedList = function() {
     if (list.head === null) {
       list.head = temp;
       list.tail = temp;
-    // else traverse down the list until reaching the tail/last node and point that to temp as the new tail
+      // else traverse down the list until reaching the tail/last node and point that to temp as the new tail
     } else {
       pointer = list.head;
       while (pointer.next !== null) {
@@ -25,11 +25,30 @@ var LinkedList = function() {
 
   list.removeHead = function() {
     // removes first node from the list and returns its value
-
+    // should only remove if the list is not empty
+    if (list.head !== null) {
+      // set a temp node to the current head's value
+      let temp = list.head.value;
+      // remove the first node by setting head equal to head.next
+      list.head = list.head.next;
+      // return the temp node
+      return temp;
+    }
   };
 
   list.contains = function(target) {
     // returns boolean whether or not the target is in the linked list
+    // traverse through the entire linked list
+    var pointer = list.head;
+    while (pointer !== null) {
+      // if a match is found return true
+      if (pointer.value === target) {
+        return true;
+      }
+      pointer = pointer.next;
+    }
+    // otherwise return false
+    return false;
   };
 
   return list;
