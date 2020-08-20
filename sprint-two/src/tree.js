@@ -48,5 +48,5 @@ treeMethods.contains = function(target) {
 
 /*
  * Complexity: What is the time complexity of the above functions?
- * addChild should run in O(log n) time if it is a binary search tree and the contains method should run in linear O(n) time
+ * addChild should run in O(h) time relative to the height of the tree and the contains method should run in linear O(n) time
  */
