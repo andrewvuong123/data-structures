@@ -59,14 +59,24 @@ BinarySearchTree.prototype.contains = function(value) {
   }
 };
 
-// I:
-// O:
-// C:
+// I: accepts a callback fcn
+// O: updated tree after calling the input on every value
+// C: it should run in O(n) time because we have to go through every treeNode
 // E:
-BinarySearchTree.prototype.depthFirstLog = function() {
-
+BinarySearchTree.prototype.depthFirstLog = function(cb) {
+  // traverse every node in the tree
+  // execute the callback fcn on the current node
+  cb(this.value);
+  // if there are left children, recurse on the left
+  if (this.left) {
+    this.left.depthFirstLog(cb);
+  }
+  if (this.right) { // if there are right children, recurse on the right
+    this.right.depthFirstLog(cb);
+  }
 };
 
 /*
  * Complexity: What is the time complexity of the above functions?
+ * Wrote my thoughts in the C section of IOCE
  */
