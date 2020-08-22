@@ -11,10 +11,12 @@ var Graph = function() {
 // I: takes in any node with a value
 // O: updates the graph adding in the new node, unconnected
 // C: should be O(1) since it is just adding a node into the graph unconnected
-// E: should be the same process regardless
+// E: should not add the same node if it exists in graph already
 Graph.prototype.addNode = function(node) {
   // creates key from node value, and value as an array to hold edge relationships
-  this.newGraph[node] = [];
+  if (!this.newGraph[node]) {
+    this.newGraph[node] = [];
+  }
 };
 
 // Return a boolean value indicating if the value passed to contains is represented in the graph.
