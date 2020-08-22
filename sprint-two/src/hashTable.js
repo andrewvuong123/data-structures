@@ -76,6 +76,13 @@ HashTable.prototype.remove = function(k) {
     let tuple = bucket[i];
     if (tuple[0] === k) {
       bucket.splice(i, 1);
+      // update size
+      this._size -= 1;
+      // check if space usage is below 25%
+      if (this._size < this._limit * 0.25) {
+        // resize
+        this.resize(Math.floor(this._limit / 2));
+      }
     }
   }
 };
@@ -85,7 +92,28 @@ HashTable.prototype.remove = function(k) {
 // C: runs in O(n), have to insert all values into the new hash table
 // E: if can't reduce space further
 HashTable.prototype.resize = function(newLimit) {
-
+  // keep a temp variable to store the current hash table
+  var oldStorage = this._storage;
+  // make sure the newLimit is not lower than the min allowed (8)
+  let lim = Math.max(newLimit, 8);
+  // if you can't make it any smaller, don't do anything
+  if (lim === this._limit) {
+    return;
+  }
+  // create a new hashtable with the new limit, storage and size
+  this._limit = lim;
+  this._size = 0;
+  this._storage = LimitedArray(this._limit);
+  // iterate through each existing bucket in the old storage
+  oldStorage.each(function(bucket) {
+    if (bucket !== undefined) {
+      for (let i = 0; i < bucket.length; i++) {
+        let tuple = bucket[i];
+        // insert tuples into the new hash table
+        this.insert(tuple[0], tuple[1]); // this inside here refers to global scope
+      }
+    }
+  }.bind(this)); // use bind to set this to refer to the hash table object
 };
 
 /*
