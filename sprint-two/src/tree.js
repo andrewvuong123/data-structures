@@ -4,6 +4,8 @@ var Tree = function(value) {
 
   // your code here
   newTree.children = []; // fix me
+  // add parent property
+  newTree.parent = null;
   // extend treeMethods into newTree objects
   _.extend(newTree, treeMethods);
   return newTree;
@@ -11,21 +13,25 @@ var Tree = function(value) {
 
 var treeMethods = {};
 
-// input: takes in a value to be set as the value of a new node
-// output: updated tree with the new node within it
-// constraint: n/a?
-// edge cases: same process for adding into any tree or subtree
+// I: takes in a value to be set as the value of a new node
+// O: updated tree with the new node within it
+// C: runs in O(1) time since we have access to the array indices
+// E: same process for adding into any tree or subtree
 treeMethods.addChild = function(value) {
   // create a new node (a subtree) with target value
   var node = Tree(value);
   // add the node as a child of the tree
   this.children.push(node);
+  // update the parent node to the current node's value if it exists
+  if (!(_.isUndefined(this.value))) {
+    node.parent = this.value;
+  }
 };
 
-// input: takes in any target value
-// output: boolean whether or not it is found within the tree
-// constraint: n/a?
-// edge cases: should return false if nothing is in the tree
+// I: takes in any target value
+// O: boolean whether or not it is found within the tree
+// C: runs in O(n) time, has to traverse through entire tree to find target
+// E: should return false if nothing is in the tree
 treeMethods.contains = function(target) {
   // traverse through the tree and its children starting at the root
   var node = this.children;
@@ -42,6 +48,14 @@ treeMethods.contains = function(target) {
   }
   // return false if none is found
   return found;
+};
+
+// I:
+// O:
+// C:
+// E:
+treeMethods.removeFromParent = function() {
+
 };
 
 

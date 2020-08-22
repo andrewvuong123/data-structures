@@ -5,10 +5,11 @@ describe('tree', function() {
     tree = Tree();
   });
 
-  it('should have methods named "addChild" and "contains", and a property named "value"', function() {
+  it('should have methods named "addChild" and "contains", and properties "value" and "parent"', function() {
     expect(tree.addChild).to.be.a('function');
     expect(tree.contains).to.be.a('function');
     expect(tree.hasOwnProperty('value')).to.equal(true);
+    expect(tree.hasOwnProperty('parent')).to.equal(true);
   });
 
   it('should add children to the tree', function() {
@@ -59,5 +60,17 @@ describe('tree', function() {
     expect(tree.children[1].value).to.equal('a');
     expect(tree.children[1].children[0].value).to.equal('c');
     expect(tree.contains('c')).to.equal(true);
+  });
+
+  it ('should have a parent property that refers to the parent or null if there is no node', function() {
+    tree.addChild(5);
+    tree.addChild(6);
+    tree.children[0].addChild(7);
+    tree.children[1].addChild(8);
+    expect(tree.parent).to.equal(null);
+    expect(tree.children[0].parent).to.equal(null);
+    expect(tree.children[1].parent).to.equal(null);
+    expect(tree.children[0].children[0].parent).to.equal(5);
+    expect(tree.children[1].children[0].parent).to.equal(6);
   });
 });
