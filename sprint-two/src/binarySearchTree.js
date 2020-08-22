@@ -63,22 +63,48 @@ BinarySearchTree.prototype.contains = function(value) {
 };
 
 // I: accepts a callback fcn
-// O: updated tree after calling the input on every value
+// O: updated tree after calling the input on every value using DFS
 // C: it should run in O(n) time because we have to go through every treeNode
 // E:
 BinarySearchTree.prototype.depthFirstLog = function(cb) {
-  // traverse every node in the tree
+  // traverse every node in the tree by going through all children before neighboring nodes
   // execute the callback fcn on the current node
   cb(this.value);
-  // if there are left children, recurse on the left
+  // if there are left children, recurse on the left until theres no more
   if (this.left) {
     this.left.depthFirstLog(cb);
   }
-  if (this.right) { // if there are right children, recurse on the right
+  if (this.right) { // if there are right children, recurse on the right until theres no more
     this.right.depthFirstLog(cb);
   }
 };
 
+// I: accepts a callback fcn
+// O: updated tree after calling the input on every value using BFS
+// C: it should run in O(n) time because we have to go through every treeNode
+// E:
+BinarySearchTree.prototype.breadthFirstLog = function(cb) {
+  // traverse every node in the tree depth wise before going deeper
+  // use a queue to ensure FIFO order
+  var queue = [];
+  // start from root
+  var temp = this;
+  queue.push(temp);
+  while (queue.length > 0) {
+    // enqueue left child, then right to the queue
+    if (temp.left !== null) {
+      queue.push(temp.left);
+    }
+    if (temp.right !== null) {
+      queue.push(temp.right);
+    }
+    // dequeue and callback on the first item
+    cb(queue.shift().value);
+    // update temp to next item in queue
+    temp = queue[0];
+  }
+
+};
 /*
  * Complexity: What is the time complexity of the above functions?
  * Wrote my thoughts in the C section of IOCE
