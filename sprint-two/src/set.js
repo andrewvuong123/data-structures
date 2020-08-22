@@ -1,6 +1,6 @@
 var Set = function() {
   var set = Object.create(setPrototype);
-  // can implement this set by using a hash with keys as the items and values as the count
+  // can implement this set by using a hash with keys as the items and values as a boolean
   set._storage = {}; // fix me
   return set;
 };
@@ -14,8 +14,8 @@ var setPrototype = {};
 setPrototype.add = function(item) {
   // only add if the item does not exist in storage yet
   if (!(item in this._storage)) {
-    // add the item into the storage hash and update the storage value count to 1
-    this._storage[item] = 1;
+    // add the item into the storage hash and update the value to true
+    this._storage[item] = true;
   }
 };
 
@@ -24,7 +24,8 @@ setPrototype.add = function(item) {
 // C: run in O(1), have constant access to keys
 // E:
 setPrototype.contains = function(item) {
-  return item in this._storage;
+  // !! casts the variable to a boolean
+  return !!this._storage[item];
 };
 
 // I: takes any string
