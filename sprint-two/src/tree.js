@@ -58,6 +58,23 @@ treeMethods.removeFromParent = function() {
 
 };
 
+// I: takes in a callback function
+// O: updates the tree with the cb run on every value
+// C: runs in O(n) time, has to traverse each tree node
+// E: nothing in the tree
+treeMethods.traverse = function(cb) {
+  // traverse through the tree starting at the root
+  var node = this.children;
+  for (let i = 0; i < node.length; i++) {
+    // call the cb function on each node
+    node[i].value = cb(node[i]);
+    // update parent with new value
+    node[i].parent = this.value;
+    // traverse on other children
+    node[i].traverse(cb);
+  }
+};
+
 
 
 /*
