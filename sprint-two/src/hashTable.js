@@ -3,6 +3,8 @@
 var HashTable = function() {
   this._limit = 8;
   this._storage = LimitedArray(this._limit);
+  // new prop size to help with resizing
+  this._size = 0;
 };
 
 // I: takes in a key and a value
@@ -13,33 +15,29 @@ HashTable.prototype.insert = function(k, v) {
   // use hashing fcn to translate key to what index to insert into storage
   var index = getIndexBelowMaxForKey(k, this._limit);
   // init a bucket var to hold the key:value tuples in case of collisions (same hashed indices)
-  var bucket, tuple;
-  // if a bucket exists, push the tuple onto that bucket
-  if (this._storage.get(index) !== undefined) {
-    bucket = this._storage.get(index);
-    let sameKey = false;
-    // iterate bucket to check if key exists
-    for (let i = 0; i < bucket.length; i++) {
-      // if the key exists in a tuple, overwrite the value
-      tuple = bucket[i];
-      if (tuple[0] === k) {
-        tuple[1] = v;
-        sameKey = true;
-      }
+  var bucket = this._storage.get(index) || [];
+  // iterate bucket to check if key exists
+  for (let i = 0; i < bucket.length; i++) {
+    // if the key exists in a tuple, overwrite the value
+    let tuple = bucket[i];
+    if (tuple[0] === k) {
+      tuple[1] = v;
+      // return so that nothing is pushed
+      return;
     }
-    // if input is a new key, push the new tuple into the bucket
-    if (!sameKey) {
-      tuple = [k, v];
-      bucket.push(tuple);
-    }
-  } else {
-    // if a bucket doesn't exist make a new one and push the tuple into the bucket
-    bucket = [];
-    tuple = [k, v];
-    bucket.push(tuple);
   }
+  // push the tuple into the bucket if value is not in the bucket already
+  tuple = [k, v];
+  bucket.push(tuple);
   // update the hash table with the pair inserted into the bucket and the bucket created/updated at the storage index
   this._storage.set(index, bucket);
+  // update size of the storage
+  this._size += 1;
+  // check if 75% of space has been filled
+  if (this._size > this._limit * 0.75) {
+    // if it has, resize the hashTable to double its current size
+    this.resize(this._limit * 2);
+  }
 };
 
 // I: takes in any key
@@ -50,19 +48,16 @@ HashTable.prototype.retrieve = function(k) {
   // use hashing fcn to translate key to an index in storage
   var index = getIndexBelowMaxForKey(k, this._limit);
   // gets the bucket from the storage at index
-  var bucket = this._storage.get(index);
-  // if the key doesn't exist, return undefined
-  if (bucket !== undefined) {
-    // iterate through the tuples inside the bucket and check if there is any matching keys
-    for (let i = 0; i < bucket.length; i++) {
-      // return the value if you find a match
-      let tuple = bucket[i];
-      if (tuple[0] === k) {
-        return tuple[1];
-      }
+  var bucket = this._storage.get(index) || [];
+  // iterate through the tuples inside the bucket and check if there is any matching keys
+  for (let i = 0; i < bucket.length; i++) {
+    // return the value if you find a match
+    let tuple = bucket[i];
+    if (tuple[0] === k) {
+      return tuple[1];
     }
   }
-  // if no match is found, return undefined
+  // if the key doesn't exist or no match, return undefined
   return undefined;
 };
 
@@ -73,25 +68,25 @@ HashTable.prototype.retrieve = function(k) {
 HashTable.prototype.remove = function(k) {
   // index var is stored in a "closure scope", will remain available to the function
   var index = getIndexBelowMaxForKey(k, this._limit);
-  // create a callback function to splice the input key from the bucket
-  var callRemove = function(bucket, key, storage) {
-    // use the index to find the corresponding hashed key in storage
-    if (key === index) {
-      // go into the bucket and iterate through to find the tuple that matches the input k
-      for (let i = 0; i < bucket.length; i++) {
-        // splice that tuple out of the bucket once found
-        let tuple = bucket[i];
-        if (tuple[0] === k) {
-          bucket.splice(i, 1);
-        }
-      }
+  // get the corresponding bucket
+  var bucket = this._storage.get(index) || [];
+  // go into the bucket and iterate through to find the tuple that matches the input k
+  for (let i = 0; i < bucket.length; i++) {
+    // splice that tuple out of the bucket once found
+    let tuple = bucket[i];
+    if (tuple[0] === k) {
+      bucket.splice(i, 1);
     }
-  };
-  // use LimitedArray's helperfcn each to use the callback fcn on each item in the storage array
-  this._storage.each(callRemove);
+  }
 };
 
+// I: takes in a new limit value
+// O: creates a new hashtable with increased/decreased space
+// C: runs in O(n), have to insert all values into the new hash table
+// E: if can't reduce space further
+HashTable.prototype.resize = function(newLimit) {
 
+};
 
 /*
  * Complexity: What is the time complexity of the above functions?
