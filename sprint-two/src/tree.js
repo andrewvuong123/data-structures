@@ -33,21 +33,20 @@ treeMethods.addChild = function(value) {
 // C: runs in O(n) time, has to traverse through entire tree to find target
 // E: should return false if nothing is in the tree
 treeMethods.contains = function(target) {
-  // traverse through the tree and its children starting at the root
+  // base case, if the node contains the target, return true
+  if (this.value === target) {
+    return true;
+  }
+  // traverse through the tree and its children
   var node = this.children;
-  // keep track of whether or not it has been found yet
-  var found = false;
   for (let i = 0; i < node.length; i++) {
-    // if the target has been found or the current node is a match, return true
-    if (node[i].value === target || found === true) {
+    // if the target has been found, return true
+    if (node[i].contains(target)) {
       return true;
-    } else if (node[i].children.length > 0) {
-      // if the current tree has children, recurse through each of the children
-      found = node[i].contains(target);
     }
   }
-  // return false if none is found
-  return found;
+  // if traverse the whole tree, then return false
+  return false;
 };
 
 // I:
