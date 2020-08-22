@@ -59,14 +59,16 @@ Graph.prototype.removeNode = function(node) {
 // I: any two nodes in the graph
 // O: boolean if they share an edge relationship
 // C: should be O(n) because we are linearly searching through the arrays to check for existence
-// E:
+// E: if either edge does not exist in the graph, return false
 Graph.prototype.hasEdge = function(fromNode, toNode) {
   // init two variables to both nodes' edge relationship arrays
-  let fromEdges = this.newGraph[fromNode];
-  let toEdges = this.newGraph[toNode];
-  // if both node exists in the other's respective array there is an edge
-  if (fromEdges.includes(toNode) && toEdges.includes(fromNode)) {
-    return true;
+  if (this.contains(fromNode) && this.contains(toNode)) {
+    let fromEdges = this.newGraph[fromNode];
+    let toEdges = this.newGraph[toNode];
+    // if both node exists in the other's respective array there is an edge
+    if (fromEdges.includes(toNode) && toEdges.includes(fromNode)) {
+      return true;
+    }
   }
   // return false if not
   return false;

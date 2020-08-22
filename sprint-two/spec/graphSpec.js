@@ -68,4 +68,27 @@ describe('graph', function() {
     expect(graph.hasEdge(3, 5)).to.equal(true);
     expect(graph.hasEdge(5, 5)).to.equal(true);
   });
+
+  // additional tests
+  it ('should not create/remove edges between nodes if one does not exist', function() {
+    graph.addNode(3);
+    graph.addNode(5);
+    graph.addEdge(5, 4);
+    graph.removeEdge(5, 3);
+    expect(graph.hasEdge(4, 5)).to.equal(false);
+    expect(graph.hasEdge(3, 5)).to.equal(false);
+  });
+
+  it ('should not add duplicates in the graph if they already exist', function() {
+    graph.addNode(3);
+    graph.addNode(3);
+    expect(graph.contains(3)).to.equal(true);
+  });
+
+  it ('should be able to use any value as input', function() {
+    graph.addNode('1');
+    graph.addNode(1);
+    graph.addEdge(1, '1');
+    expect(graph.hasEdge(1, '1')).to.equal(true);
+  });
 });

@@ -41,4 +41,23 @@ describe('tree', function() {
     expect(tree.contains(8)).to.equal(true);
   });
 
+  // additional tests
+  it ('should take in any value, even strings', function() {
+    tree.addChild('a');
+    tree.addChild('b');
+    tree.children[0].addChild('c');
+    expect(tree.children[0].value).to.equal('a');
+    expect(tree.contains('c')).to.equal(true);
+  });
+
+  it ('should be able to hold duplicate values', function() {
+    tree.addChild('a');
+    tree.addChild('a');
+    tree.children[0].addChild('b');
+    tree.children[1].addChild('c');
+    expect(tree.children[0].value).to.equal('a');
+    expect(tree.children[1].value).to.equal('a');
+    expect(tree.children[1].children[0].value).to.equal('c');
+    expect(tree.contains('c')).to.equal(true);
+  });
 });

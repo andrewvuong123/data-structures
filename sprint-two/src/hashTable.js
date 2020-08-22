@@ -51,12 +51,15 @@ HashTable.prototype.retrieve = function(k) {
   var index = getIndexBelowMaxForKey(k, this._limit);
   // gets the bucket from the storage at index
   var bucket = this._storage.get(index);
-  // iterate through the tuples inside the bucket and check if there is any matching keys
-  for (let i = 0; i < bucket.length; i++) {
-    // return the value if you find a match
-    let tuple = bucket[i];
-    if (tuple[0] === k) {
-      return tuple[1];
+  // if the key doesn't exist, return undefined
+  if (bucket !== undefined) {
+    // iterate through the tuples inside the bucket and check if there is any matching keys
+    for (let i = 0; i < bucket.length; i++) {
+      // return the value if you find a match
+      let tuple = bucket[i];
+      if (tuple[0] === k) {
+        return tuple[1];
+      }
     }
   }
   // if no match is found, return undefined

@@ -52,4 +52,9 @@ describe('linkedList', function() {
   });
 
   // add more tests here to test the functionality of linkedList
+  it('should not contain a value that does not exist', function() {
+    linkedList.addToTail(1);
+    linkedList.addToTail(5);
+    expect(linkedList.contains(4)).to.equal(false);
+  });
 });

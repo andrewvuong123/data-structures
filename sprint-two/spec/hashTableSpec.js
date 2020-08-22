@@ -73,4 +73,11 @@ describe('hashTable', function() {
     hashTable.remove('Mr.');
     expect(hashTable._limit).to.equal(8);
   });
+
+  // additional tests
+  it ('should not contain or remove values that do not exist in the hash', function() {
+    hashTable.insert('Steven', 'Tyler');
+    hashTable.remove('Andrew');
+    expect(hashTable.retrieve('Andrew')).to.equal(undefined);
+  });
 });

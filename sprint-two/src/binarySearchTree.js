@@ -11,24 +11,27 @@ var BinarySearchTree = function(value) {
 // I: accepts any value
 // O: returns updated tree with the new node in the correct position
 // C: runs in O(log(n)), can cut input in half to find correct position by choosing left/right sides of tree
-// E: if there are duplicates, ignore?
+// E: if there are duplicates, ignore
 BinarySearchTree.prototype.insert = function(value) {
-  // create the new BST tree node
-  var newTreeNode = new BinarySearchTree(value);
-  // if the current tree's val is > new tree's val, update curr tree's left property
-  if (this.value > newTreeNode.value) {
-    // if the curr tree's left val is null, just insert new node as the child tree
-    if (this.left === null) {
-      this.left = newTreeNode;
-    } else { // else if curr tree has left children, recurse and compare values against the children
-      this.left.insert(value);
-    }
-  } else { // if the current tree's val is < new tree's val, update curr tree's right property
-    // if curr tree's right val is null, insert new node as child tree
-    if (this.right === null) {
-      this.right = newTreeNode;
-    } else { // else if curr tree has right children, recurse and compare values against the children
-      this.right.insert(value);
+  // avoid duplicate values
+  if (!this.contains(value)) {
+    // create the new BST tree node
+    var newTreeNode = new BinarySearchTree(value);
+    // if the current tree's val is > new tree's val, update curr tree's left property
+    if (this.value > newTreeNode.value) {
+      // if the curr tree's left val is null, just insert new node as the child tree
+      if (this.left === null) {
+        this.left = newTreeNode;
+      } else { // else if curr tree has left children, recurse and compare values against the children
+        this.left.insert(value);
+      }
+    } else { // if the current tree's val is < new tree's val, update curr tree's right property
+      // if curr tree's right val is null, insert new node as child tree
+      if (this.right === null) {
+        this.right = newTreeNode;
+      } else { // else if curr tree has right children, recurse and compare values against the children
+        this.right.insert(value);
+      }
     }
   }
 };
