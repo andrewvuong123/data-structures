@@ -44,4 +44,22 @@ describe('set', function() {
     set.remove('a');
     expect(set.contains('a')).to.equal(false);
   });
+
+  it ('should be able to take numbers as input', function() {
+    set.add(1);
+    set.add(2);
+    set.add(3);
+    set.remove(1);
+    expect(set.contains(1)).to.equal(false);
+    expect(set.contains(2)).to.equal(true);
+  });
+
+  it ('should be able to take any type as input', function() {
+    set.add({'obj': 1});
+    set.add(true);
+    set.add(false);
+    set.remove(false);
+    expect(set.contains(true)).to.equal(true);
+    expect(set.contains({'obj': 1})).to.equal(true);
+  });
 });
